@@ -1,0 +1,8 @@
+MONGO_URL = mongodb+srv://asmia:12345@cluster0.rep57io.mongodb.net/test
+SECRET_KEY = somesupersecretsecret
+RESET_PASSWORD_KEY = somesupersupersecret
+HOST = smtp.mailtrap.io
+PORT = 8080
+EMAIL_PORT= 2525
+USERNAME = 2b29d044df40dc
+PASSWORD = e2142564c1acd1
