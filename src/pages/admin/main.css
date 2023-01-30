@@ -1,0 +1,24 @@
+.rmsc {
+  width: 87.5%;
+}
+.iconcolor {
+  color: rgb(170, 168, 23);
+  text-align: center;
+}
+.deleteicon {
+  color: rgb(241, 63, 63);
+}
+.image {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+.video {
+  border-radius: 50%;
+  border: 1px solid #C1C1C1;
+  width: 50px;
+  height: 50px;
+}
+.error{
+  color: rgb(219, 82, 82);
+}
