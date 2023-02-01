@@ -2,6 +2,7 @@ import React from "react";
 import { useHistory, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../main.css";
+import { DrillsURL, VideosURL } from "../../../config/url-constant";
 const Viewdrill = () => {
   const [drills, setDrills] = useState([]);
   const params = useParams();
@@ -9,7 +10,7 @@ const Viewdrill = () => {
     console.log(params.drillId);
     const fetchdrills = async () => {
       const response = await fetch(
-        `http://localhost:8080/drill/${params.drillId}`
+        DrillsURL+`/${params.drillId}`
       );
       const responseData = await response.json();
       console.log(responseData.drills.drillName);
@@ -18,8 +19,8 @@ const Viewdrill = () => {
     fetchdrills();
   }, []);
   const deletevideo = async (id) => {
-    // console.log(id);
-    const response = await fetch(`http://localhost:8080/videos/${id}`, {
+    
+    const response = await fetch(DrillsURL+`/${id}`, {
       method: "DELETE",
     });
     const responseData = await response.json();
@@ -86,8 +87,8 @@ const Viewdrill = () => {
                                       height: "50px",
                                     }}>
                                     <source
-                                      src={
-                                        "http://localhost:8080/videos/" +
+                                      src={VideosURL+
+                                        // "http://localhost:8080/videos/" +
                                         video.videoUrl
                                       }
                                       alt="videos"

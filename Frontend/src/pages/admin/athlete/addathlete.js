@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../main.css";
+import { DrillsURL, CategoriesURL, AthletesURL} from "../../../config/url-constant"
 
 const SUPPORTED_FORMATS = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
 
@@ -15,7 +16,7 @@ const validate = Yup.object().shape({
     .max(50, "Too Long!")
     .required("Athlete name is required"),
   dateofBirth: Yup.date().required("Athlete date of birth is required"),
-  category_id: Yup.string().required("Required"),
+  category_id: Yup.string().required("Category is required"),
   drill_id: Yup.array().required("Drill is a required field"),
 
   photo: Yup.mixed()
@@ -41,7 +42,8 @@ function Login() {
   const history = useHistory();
   useEffect(() => {
     const getdrill = async () => {
-      let res = await fetch("http://localhost:8080/drill");
+      let res = await fetch(DrillsURL);
+      // let res = await fetch("http://localhost:8080/drill");
       let responseJson = await res.json();
       const Drill = [];
       for (let i = 0; i < responseJson.length; i++) {
@@ -54,7 +56,8 @@ function Login() {
       setDrill(Drill);
     };
     const getcategory = async () => {
-      let res = await fetch("http://localhost:8080/category");
+      let res = await fetch(CategoriesURL);
+      // let res = await fetch("http://localhost:8080/category");
       let responseJson = await res.json();
 
       setCategory(responseJson);
@@ -80,7 +83,8 @@ function Login() {
     data.append("category_id", values.category_id);
     select.forEach((tag) => data.append("drill_id", tag));
     data.append("photo", file);
-    let res = await fetch("http://localhost:8080/athlete", {
+    let res = await fetch(AthletesURL, {
+    
       method: "post",
       body: data,
     })
@@ -182,7 +186,7 @@ function Login() {
                       (<div className ="error">{errors.dateofBirth}</div>)}
                   <div className="input-group mb-3">
                     <select
-                      className={'form-control' + (errors.category && touched.category ? ' is-invalid' : '')}
+                      className={'form-control' + (errors.category_id && touched.category_id ? ' is-invalid' : '')}
                       value={values.category_id}
                       id="category_id"
                       name="category_id"
@@ -202,12 +206,12 @@ function Login() {
                       </div>
                     </div>
                   </div>
-                  {errors.category && touched.category && (<div className ="error">{errors.category}</div>)}
+                  {errors.category_id && touched.category_id && (<div className ="error">{errors.category_id}</div>)}
 
                   <div className="input-group mb-3">
                     <MultiSelect
                       style={{ width: "500px " }}
-                      className={'rmsc' + (errors.drill && touched.drill ? ' is-invalid' : '')}
+                      className={'rmsc' + (errors.drill_id && touched.drill_id ? ' is-invalid' : '')}
                       displayValue="label"
                       value={selected}
                       id="drill_id"
@@ -224,7 +228,7 @@ function Login() {
                     </div>
                    
                   </div>
-                  {errors.drill && touched.drill && (<div className ="error">{errors.drill}</div>)}
+                  {errors.drill_id && touched.drill_id && (<div className ="error">{errors.drill_id}</div>)}
                   <img
                     class="image"
                     

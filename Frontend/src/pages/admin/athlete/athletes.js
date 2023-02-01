@@ -3,13 +3,15 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../main.css";
+import { AthletesURL, PhotoURL } from "../../../config/url-constant";
 const Categories = () => {
   const [athletes, setAthletes] = useState([]);
   useEffect(() => {
     fetchathletes();
   }, []);
   const fetchathletes = async () => {
-    const response = await fetch("http://localhost:8080/athlete");
+    // const response = await fetch("http://localhost:8080/athlete");
+    const response = await fetch(AthletesURL);
     const responseData = await response.json();
     console.log(responseData);
 
@@ -18,7 +20,8 @@ const Categories = () => {
 
   const deleteathlete = async (id) => {
     console.log(id);
-    const response = await fetch(`http://localhost:8080/athlete/${id}`, {
+    // const response = await fetch(`http://localhost:8080/athlete/${id}`, {
+    const response = await fetch(AthletesURL + `/${id}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -81,10 +84,7 @@ const Categories = () => {
                               <td>
                                 <img
                                   class="image"
-                                  src={
-                                    "http://localhost:8080/images/photos/" +
-                                    athlete.photo
-                                  }
+                                  src={PhotoURL + athlete.photo}
                                   alt="Athlete Image"
                                 />
                               </td>

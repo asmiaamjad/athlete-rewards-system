@@ -2,8 +2,8 @@ import React, { useContext, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Link, useHistory } from "react-router-dom";
-import {toast} from 'react-toastify'
-
+import { toast } from "react-toastify";
+import { CategoriesURL } from "../../../config/url-constant";
 const SUPPORTED_FORMATS = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
 // Creating schema
 const validate = Yup.object().shape({
@@ -36,19 +36,22 @@ function Addcategory() {
     console.log(file);
     data.append("categoryName", values.categoryName);
     data.append("photo", file);
-    let res = await fetch("http://localhost:8080/category", {
+
+    let res = await fetch(CategoriesURL, {
       method: "post",
       body: data,
-  }).then((response) =>{response.json();
-    if(response.status===201){
-        toast.success(`Category added successfully`);
-       history.push("/category");
-    }
-  }).catch((error) => {
-    toast.error("Something invalid happened");
-    console.error(error);
-  });
-    
+    })
+      .then((response) => {
+        response.json();
+        if (response.status === 201) {
+          toast.success(`Category added successfully`);
+          history.push("/category");
+        }
+      })
+      .catch((error) => {
+        toast.error("Something invalid happened");
+        console.error(error);
+      });
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
     actions.resetForm();
@@ -84,7 +87,12 @@ function Addcategory() {
                 <Form>
                   <div className="input-group mb-3">
                     <input
-                     className={'form-control' + (errors.categoryName && touched.categoryName ? ' is-invalid' : '')}
+                      className={
+                        "form-control" +
+                        (errors.categoryName && touched.categoryName
+                          ? " is-invalid"
+                          : "")
+                      }
                       type="text"
                       name="categoryName"
                       onChange={handleChange}
@@ -98,14 +106,11 @@ function Addcategory() {
                         <span className="fas fa-user" />
                       </div>
                     </div>
-                   
                   </div>
-                  {errors.categoryName &&
-                      touched.categoryName &&
-                      (
-                        <div className="error">{errors.categoryName}</div>
-                      )}
-                      <div></div>
+                  {errors.categoryName && touched.categoryName && (
+                    <div className="error">{errors.categoryName}</div>
+                  )}
+                  <div></div>
                   <img
                     class="image"
                     src={
@@ -119,7 +124,10 @@ function Addcategory() {
 
                   <div className="input-group mb-3">
                     <input
-                      className={'form-control' + (errors.photo && touched.photo ? ' is-invalid' : '')}
+                      className={
+                        "form-control" +
+                        (errors.photo && touched.photo ? " is-invalid" : "")
+                      }
                       id="photo"
                       name="photo"
                       type="file"
@@ -127,18 +135,16 @@ function Addcategory() {
                         setFieldValue("photo", event.currentTarget.files[0]);
                         setFile(event.currentTarget.files[0]);
                       }}
-                      
                     />
                     <div className="input-group-append">
                       <div className="input-group-text">
                         <span className="fas fa-user" />
                       </div>
                     </div>
-                    
                   </div>
                   {errors.photo && touched.photo && (
-        <div className="error">{errors.photo}</div>
-      )}
+                    <div className="error">{errors.photo}</div>
+                  )}
                   <div className="row">
                     <div className="col-8"></div>
                     {/* /.col */}

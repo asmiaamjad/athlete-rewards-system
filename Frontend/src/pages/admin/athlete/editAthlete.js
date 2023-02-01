@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import { MultiSelect } from "react-multi-select-component";
 import moment from "moment";
-// import { format } from 'date-fns';
 import * as Yup from "yup";
 import { Link, useHistory, useParams } from "react-router-dom";
 import "../main.css";
 import { toast } from "react-toastify";
+import { DrillsURL, CategoriesURL, AthletesURL, PhotoURL } from '../../../config/url-constant';
 
 const SUPPORTED_FORMATS = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
 
@@ -15,11 +15,9 @@ const validate = Yup.object().shape({
   athleteName: Yup.string().required().min(3, "Too Short!").max(50, "Too Long!"),
   dateofBirth: Yup.date().required("Required"),
   category_id: Yup.string().required("Required"),
-
   // drill_id: Yup.string().required("Drill is a required field"),
   photo: Yup.mixed()
     .nullable()
-    // .required("A file is required")
     .test("size", "Filesize is too big", (file) => {
       if (file) {
         return file.size <= 5 * 1024 * 1024;
@@ -45,8 +43,7 @@ function EditAthlete() {
   const history = useHistory();
   useEffect(() => {
     const fetchathlete = async () => {
-      const response = await fetch(
-        `http://localhost:8080/athlete/${params.athleteId}`
+      const response = await fetch(AthletesURL+`/${params.athleteId}`
       );
       const responseData = await response.json();
       const Drill = [];
@@ -61,7 +58,8 @@ function EditAthlete() {
       setAthletes(responseData);
     };
     const getdrill = async () => {
-      let res = await fetch("http://localhost:8080/drill");
+      
+      let res = await fetch(DrillsURL);
       let responseJson = await res.json();
       const Drilloptions = [];
       for (let i = 0; i < responseJson.length; i++) {
@@ -76,7 +74,8 @@ function EditAthlete() {
       console.log("options drills", Drilloptions);
     };
     const getcategory = async () => {
-      let res = await fetch("http://localhost:8080/category");
+      
+      let res = await fetch(CategoriesURL);
       let responseJson = await res.json();
 
       setCategory(responseJson);
@@ -104,7 +103,8 @@ function EditAthlete() {
     //   console.log('form values', value);
     // }
 
-    let res = await fetch(`http://localhost:8080/athlete/${params.athleteId}`, {
+    
+      let res = await fetch(AthletesURL+`/${params.athleteId}`, {
       method: "put",
       body: data,
     })
@@ -250,11 +250,11 @@ function EditAthlete() {
                   {errors.drill && touched.drill && (<div className ="error">{errors.drill}</div>)}
 
                   <img
-                    class="img-size-50 img-circle mr-3"
+                    class="image"
                     src={
                       values.photo
                         ? URL.createObjectURL(values.photo)
-                        : "http://localhost:8080/images/photos/" +
+                        : PhotoURL +
                           athlete?.photo
                     }
                     alt="Athlete Image"

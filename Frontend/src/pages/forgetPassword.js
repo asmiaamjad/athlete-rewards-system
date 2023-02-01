@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
-// import TextField from "./helper/customTextfield";
 import * as Yup from "yup";
-import {toast} from 'react-toastify'
+import {toast} from 'react-toastify';
+import {ForgotpasswordURL} from "../config/url-constant";
+
 const ForgetPassword = () => {
   const [error, setError] = useState("null");
   const onSubmit = async (values, actions) => {
     console.log(values);
 
-    const res = fetch("http://localhost:8080/auth/forgotpassword", {
+    const res = fetch(ForgotpasswordURL, {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),

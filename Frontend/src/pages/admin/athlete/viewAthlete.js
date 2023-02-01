@@ -2,7 +2,9 @@ import React from "react";
 import { useParams, Link, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import "../main.css"
+import "../main.css";
+import { AthletesURL, DrillsURL } from "../../../config/url-constant";
+
 const ViewAthlete = () => {
   const [athletes, setAthletes] = useState([]);
   //   const params = useParams();
@@ -11,8 +13,7 @@ const ViewAthlete = () => {
   useEffect(() => {
     const fetchathletes = async () => {
       console.log(athleteId);
-      const response = await fetch(
-        `http://localhost:8080/athlete/${athleteId}`
+      const response = await fetch(AthletesURL+`/${athleteId}`
       );
       const responseData = await response.json();
       console.log(responseData);
@@ -22,7 +23,8 @@ const ViewAthlete = () => {
   }, []);
   const deleteDrill = async (id) => {
     console.log(id);
-    const response = await fetch(`http://localhost:8080/drill/${id}`, {
+    // const response = await fetch(`http://localhost:8080/drill/${id}`, {
+      const response = await fetch(DrillsURL+`/${id}`, {
       method: "DELETE",
     })
       .then((response) => {

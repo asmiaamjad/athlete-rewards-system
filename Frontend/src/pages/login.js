@@ -6,6 +6,7 @@ import ForgetPassword from "./forgetPassword.js";
 import AuthContext from "../store/auth-context";
 import Signup from "./Signup";
 import { toast } from "react-toastify";
+import {LoginURL} from '../config/url-constant'
 
 // Creating schema
 const validate = Yup.object().shape({
@@ -21,8 +22,8 @@ function Login() {
   const authCtx = useContext(AuthContext);
   const onSubmit = async (values, actions) => {
     console.log(values);
-
-    const res = fetch("http://localhost:8080/auth/login", {
+    const res = fetch(LoginURL, {
+    
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),

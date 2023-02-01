@@ -1,16 +1,15 @@
 import React from "react";
 import { useHistory, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import "../main.css"
+import "../main.css";
+import { CategoriesURL, PhotoURL } from "../../../config/url-constant";
 const Viewdrill = () => {
   const params = useParams();
   const [athletes, setAthletes] = useState([]);
 
   useEffect(() => {
     const fetchathletes = async () => {
-      const response = await fetch(
-        `http://localhost:8080/category/${params.categoryId}`
-      );
+      const response = await fetch(CategoriesURL + `/${params.categoryId}`);
       const responseData = await response.json();
       console.log(responseData.category.categoryName);
       setAthletes(responseData);
@@ -18,13 +17,11 @@ const Viewdrill = () => {
     fetchathletes();
   }, []);
   const deleteathlete = async (id) => {
-    // console.log(id);
-    const response = await fetch(`http://localhost:8080/category/${id}`, {
+    const response = await fetch(CategoriesURL + `/${id}`, {
       method: "DELETE",
     });
     const responseData = await response.json();
     console.log(responseData);
-    // fetchdrills();
   };
   return (
     <div>
@@ -38,7 +35,7 @@ const Viewdrill = () => {
             </div>
           </div>
         </section>
-        {/* {athletes.map((athlete) => ( */}
+
         <section class="content">
           <div class="container-fluid">
             <div class="row">
@@ -49,8 +46,8 @@ const Viewdrill = () => {
                       {athletes?.category?.categoryName}
                     </h3>
                     <div class="card-tools">
-                      <Link to="/addathlete"><i class="fas fa-plus"></i> &nbsp;
-                        Add Athlete
+                      <Link to="/addathlete">
+                        <i class="fas fa-plus"></i> &nbsp; Add Athlete
                       </Link>
                     </div>
                   </div>
@@ -62,53 +59,60 @@ const Viewdrill = () => {
                           <th>Image</th>
                           <th>Athlete Name</th>
 
-                          <th style={{ width: "40px" ,paddingLeft:"190px" }}>Actions</th>
+                          <th style={{ width: "40px", paddingLeft: "190px" }}>
+                            Actions
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
                         {athletes?.athlete?.length === 0 ? (
                           <>
-                          <tr>
-                            <td>
-                            No Athlete found in this category
-                            </td>
-                          </tr>
-                        </>
-                          
+                            <tr>
+                              <td>No Athlete found in this category</td>
+                            </tr>
+                          </>
                         ) : (
                           athletes?.athlete?.map((athlete) => (
                             <>
                               <tr key={athlete._id}>
                                 <td>
-                                  <img class="image"
+                                  <img
+                                    class="image"
                                     src={
-                                      "http://localhost:8080/images/photos/" +
+                                      PhotoURL +
                                       athlete.photo
                                     }
                                     alt="Athlete Image"
                                   />
                                 </td>
-                                <td style={{padding:"25px"}}>{athlete.athleteName}</td>
+                                <td style={{ padding: "25px" }}>
+                                  {athlete.athleteName}
+                                </td>
 
-                                <td style={{padding:"25px",textAlign:"center"}}>
+                                <td
+                                  style={{
+                                    padding: "25px",
+                                    textAlign: "center",
+                                  }}
+                                >
                                   <Link to={`/viewathletes/${athlete._id}`}>
-                                    <span><i class="fas fa-eye iconcolor"></i></span>
+                                    <span>
+                                      <i class="fas fa-eye iconcolor"></i>
+                                    </span>
                                   </Link>
                                 </td>
-                                <td style={{padding:"25px"}}>
-                                  <Link
-                                    to={`/athletes/${athlete._id}`}
-                                  >
+                                <td style={{ padding: "25px" }}>
+                                  <Link to={`/athletes/${athlete._id}`}>
                                     <span>
                                       <i class="fas fa-edit"></i>
                                     </span>
                                   </Link>
                                 </td>
-                                <td style={{padding:"25px"}}>
-                                 <i class="fas fa-trash deleteicon"
+                                <td style={{ padding: "25px" }}>
+                                  <i
+                                    class="fas fa-trash deleteicon"
                                     onClick={() => deleteathlete(athlete._id)}
-                                  >
-                                   </i>
+                                  ></i>
                                 </td>
                               </tr>
                             </>
@@ -122,7 +126,6 @@ const Viewdrill = () => {
             </div>
           </div>
         </section>
-        {/* ))}  */}
       </div>
     </div>
   );

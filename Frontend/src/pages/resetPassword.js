@@ -5,6 +5,7 @@ import { Formik, Form } from "formik";
 // import Login from "./login";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import {ResetpasswordURL} from "../config/url-constant"
 
 const ResetPassword = () => {
   const params = useParams();
@@ -16,7 +17,7 @@ const ResetPassword = () => {
 
     console.log(params.token);
     const res = fetch(
-      `http://localhost:8080/auth/resetpassword/${params.token}`,
+      ResetpasswordURL+`${params.token}`,
       {
         method: "put",
         headers: { "Content-Type": "application/json" },

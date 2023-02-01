@@ -1,22 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
-import moment from 'moment';
+import moment from "moment";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import { DrillsURL, VideosURL } from "../../../config/url-constant";
 const SUPPORTED_FORMATS = ["video/mp4", "video/MPEG", "video/MKV"];
 
 // Creating schema
 const validate = Yup.object().shape({
-    title: Yup.string()
+  title: Yup.string()
     .min(3, "Too Short!")
     .max(50, "Too Long!")
     .required("Video title is required"),
   points: Yup.number()
-  .positive()
-  .integer()
-  .required("video points are required"),
+    .positive()
+    .integer()
+    .required("video points are required"),
   drillId: Yup.string().required("Drill is required"),
   videoUrl: Yup.mixed()
     .nullable()
@@ -39,12 +39,11 @@ function AddVideo() {
   const history = useHistory();
   useEffect(() => {
     const getdrill = async () => {
-      let res = await fetch("http://localhost:8080/drill");
+      let res = await fetch(DrillsURL);
       let responseJson = await res.json();
-        setDrill(responseJson);
-    };    
+      setDrill(responseJson);
+    };
     getdrill();
-   
   }, []);
 
   const onSubmit = async (values, actions) => {
@@ -55,22 +54,21 @@ function AddVideo() {
     data.append("points", values.points);
     data.append("drillId", values.drillId);
     data.append("videoUrl", file);
-    let res = await fetch("http://localhost:8080/videos", {
+    let res = await fetch(VideosURL, {
       method: "post",
       body: data,
-     
-    })     .then((response) =>{response.json();
-        if(response.status===201){
-            toast.success(`Video added successfully`);
-            history.replace('/video');
-        }
-        
-      
-    } )
-   
-    .catch((error) => {
-      console.error(error);
     })
+      .then((response) => {
+        response.json();
+        if (response.status === 201) {
+          toast.success(`Video added successfully`);
+          history.replace("/video");
+        }
+      })
+
+      .catch((error) => {
+        console.error(error);
+      });
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
     actions.resetForm();
@@ -84,9 +82,9 @@ function AddVideo() {
         drillId: "",
         videoUrl: null,
       }}
-    //   onSubmit={values => {
-    //     console.log(values);
-    //   }}
+      //   onSubmit={values => {
+      //     console.log(values);
+      //   }}
       onSubmit={onSubmit}
     >
       {({
@@ -111,7 +109,10 @@ function AddVideo() {
                 <Form>
                   <div className="input-group mb-3">
                     <input
-                      className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')}
+                      className={
+                        "form-control" +
+                        (errors.title && touched.title ? " is-invalid" : "")
+                      }
                       type="text"
                       name="title"
                       onChange={handleChange}
@@ -124,16 +125,18 @@ function AddVideo() {
                       <div className="input-group-text">
                         <span className="fas fa-user" />
                       </div>
-                    </div></div>
-                    {errors.title &&
-                      touched.title &&(
-                        <div className="error">{errors.title}</div>
-                      )
-                      }
-                  
+                    </div>
+                  </div>
+                  {errors.title && touched.title && (
+                    <div className="error">{errors.title}</div>
+                  )}
+
                   <div className="input-group mb-3">
                     <input
-                      className={'form-control' + (errors.points && touched.points ? ' is-invalid' : '')}
+                      className={
+                        "form-control" +
+                        (errors.points && touched.points ? " is-invalid" : "")
+                      }
                       type="number"
                       name="points"
                       onChange={handleChange}
@@ -146,45 +149,50 @@ function AddVideo() {
                       <div className="input-group-text">
                         <span className="fas fa-user" />
                       </div>
-                    </div></div>
-                    {errors.points &&
-                      touched.points &&
-                      (
-                        <div className="error">{errors.points}</div>
-                      )}
-                  
-                
+                    </div>
+                  </div>
+                  {errors.points && touched.points && (
+                    <div className="error">{errors.points}</div>
+                  )}
+
                   <div className="input-group mb-3">
                     <select
-                      className={'form-control' + (errors.drillId && touched.drillId ? ' is-invalid' : '')}
+                      className={
+                        "form-control" +
+                        (errors.drillId && touched.drillId ? " is-invalid" : "")
+                      }
                       value={values.drillId}
                       id="drillId"
                       name="drillId"
                       onChange={handleChange}
-                      placeholder= "Select a drill"
+                      placeholder="Select a drill"
                     >
-                       <option value="">Select a drill</option>
-        {drill.length > 0 && drill.map((drill) => (
-      <option key={drill._id} value={drill._id}>
-
-        {drill.drillName}
-       
-      </option>
-  ))}
+                      <option value="">Select a drill</option>
+                      {drill.length > 0 &&
+                        drill.map((drill) => (
+                          <option key={drill._id} value={drill._id}>
+                            {drill.drillName}
+                          </option>
+                        ))}
                     </select>
                     <div className="input-group-append">
                       <div className="input-group-text">
                         <span className="fas fa-square" />
                       </div>
-                    </div> </div>
-                    {errors.drillId && touched.drillId && (
-        <div className="error">{errors.drillId}</div>
-      )}
-                 
+                    </div>{" "}
+                  </div>
+                  {errors.drillId && touched.drillId && (
+                    <div className="error">{errors.drillId}</div>
+                  )}
 
                   <div className="input-group mb-3">
                     <input
-                      className={'form-control' + (errors.videoUrl && touched.videoUrl ? ' is-invalid' : '')}
+                      className={
+                        "form-control" +
+                        (errors.videoUrl && touched.videoUrl
+                          ? " is-invalid"
+                          : "")
+                      }
                       id="videoUrl"
                       name="videoUrl"
                       type="file"
@@ -199,11 +207,11 @@ function AddVideo() {
                         <span className="fas fa-user" />
                       </div>
                     </div>
-                    </div>
-                    {errors.videoUrl && touched.videoUrl && (
-        <div className="error">{errors.videoUrl}</div>
-      )}
-                  
+                  </div>
+                  {errors.videoUrl && touched.videoUrl && (
+                    <div className="error">{errors.videoUrl}</div>
+                  )}
+
                   <div className="row">
                     <div className="col-8"></div>
                     {/* /.col */}

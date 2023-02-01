@@ -3,6 +3,8 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { PhotoURL, UsersURL } from "../../../config/url-constant";
+
 var token = localStorage.getItem("token");
 const SUPPORTED_FORMATS = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
 // Creating schema
@@ -17,28 +19,24 @@ const validate = Yup.object().shape({
     .min(15, "You need to be older than 15 to register")
     .required("User age is required"),
   role: Yup.string().required("User role is required"),
- 
+
   email: Yup.string()
     .required("Email is a required")
     .email("Invalid email format"),
-  password: Yup.string().required("Password is a required"),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Passwords do not match")
-    .required("Confirm password is required"),
   photo: Yup.mixed()
     .nullable()
-    .required("User photo is required")
-    .test(
-      "size",
-      "Filesize is too big",
-      (value) => value && value.size <= 5 * 1024 * 1024 // 5MB
-    )
+    .test("size", "Filesize is too big", (file) => {
+      if (file) {
+        return file.size <= 5 * 1024 * 1024;
+      } else {
+        return true;
+      }
+    })
     .test(
       "type",
       "Invalid file format selection",
       (value) => !value || (value && SUPPORTED_FORMATS.includes(value?.type))
     ),
-  
 });
 
 function EditUser() {
@@ -48,9 +46,7 @@ function EditUser() {
   const history = useHistory();
   useEffect(() => {
     const fetchusers = async () => {
-      const response = await fetch(
-        `http://localhost:8080/users/${params.userId}`
-      );
+      const response = await fetch(UsersURL + `/${params.userId}`);
       const responseData = await response.json();
       console.log(responseData);
       setUsers(responseData);
@@ -70,7 +66,7 @@ function EditUser() {
       console.log("form values", value);
     }
 
-    let res = await fetch(`http://localhost:8080/users/${params.userId}`, {
+    let res = await fetch(UsersURL + `/${params.userId}`, {
       method: "put",
       body: data,
     })
@@ -125,7 +121,12 @@ function EditUser() {
                 <Form>
                   <div className="input-group mb-3">
                     <input
-                       className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')}
+                      className={
+                        "form-control" +
+                        (errors.username && touched.username
+                          ? " is-invalid"
+                          : "")
+                      }
                       type="text"
                       name="username"
                       onChange={handleChange}
@@ -138,12 +139,18 @@ function EditUser() {
                       <div className="input-group-text">
                         <span className="fas fa-envelope" />
                       </div>
-                    </div></div>
-                    {errors.username && touched.username && (<div class ="error">{errors.username}</div>)}
-                 
+                    </div>
+                  </div>
+                  {errors.username && touched.username && (
+                    <div class="error">{errors.username}</div>
+                  )}
+
                   <div className="input-group mb-3">
                     <input
-                       className={'form-control' + (errors.age && touched.age ? ' is-invalid' : '')}
+                      className={
+                        "form-control" +
+                        (errors.age && touched.age ? " is-invalid" : "")
+                      }
                       type="number"
                       name="age"
                       onChange={handleChange}
@@ -156,11 +163,13 @@ function EditUser() {
                       <div className="input-group-text">
                         <span className="fas fa-lock" />
                       </div>
-                    </div></div>
-                    {errors.age && touched.age && (<div class ="error">{errors.age}</div>)}
-                  
+                    </div>
+                  </div>
+                  {errors.age && touched.age && (
+                    <div class="error">{errors.age}</div>
+                  )}
                   <div className="input-group mb-3">
-                    <input
+                  <select
                       name="role"
                       className={'form-control' + (errors.role && touched.role ? ' is-invalid' : '')}
                       onChange={handleChange}
@@ -168,17 +177,26 @@ function EditUser() {
                       value={values.role}
                       placeholder="Role"
                       id="role"
-                    ></input>
+                    >
+                      <option value="">Select your Role</option>
+                      <option value="user">User</option>
+                      <option value="athlete">Athlete</option>
+                    </select>
                     <div className="input-group-append">
                       <div className="input-group-text">
                         <span className="fas fa-user" />
                       </div>
                     </div>
                   </div>
-                  {errors.role && touched.role && (<div class ="error">{errors.role}</div>)}
+                  {errors.role && touched.role && (
+                    <div class="error">{errors.role}</div>
+                  )}
                   <div className="input-group mb-3">
                     <input
-                       className={'form-control' + (errors.email && touched.email ? ' is-invalid' : '')}
+                      className={
+                        "form-control" +
+                        (errors.email && touched.email ? " is-invalid" : "")
+                      }
                       type="email"
                       name="email"
                       onChange={handleChange}
@@ -191,22 +209,27 @@ function EditUser() {
                       <div className="input-group-text">
                         <span className="fas fa-envelope" />
                       </div>
-                    </div> </div>
-                    {errors.email && touched.email && (<div class ="error">{errors.email}</div>)}
-                 
+                    </div>{" "}
+                  </div>
+                  {errors.email && touched.email && (
+                    <div class="error">{errors.email}</div>
+                  )}
 
                   <img
                     class="image"
                     src={
                       values.photo
                         ? URL.createObjectURL(values.photo)
-                        : "http://localhost:8080/images/photos/" + users.photo
+                        : PhotoURL + users.photo
                     }
                     alt="User Image"
                   />
                   <div className="input-group mb-3">
                     <input
-                       className={'form-control' + (errors.photo && touched.photo ? ' is-invalid' : '')}
+                      className={
+                        "form-control" +
+                        (errors.photo && touched.photo ? " is-invalid" : "")
+                      }
                       id="photo"
                       name="photo"
                       type="file"
@@ -221,10 +244,12 @@ function EditUser() {
                       </div>
                     </div>
                   </div>
-                  {errors.photo && touched.photo && (<div class ="error">{errors.photo}</div>)}
+                  {errors.photo && touched.photo && (
+                    <div class="error">{errors.photo}</div>
+                  )}
 
                   <div className="row">
-                  <div className="col-8"></div>
+                    <div className="col-8"></div>
                     <div className="col-4">
                       <button
                         type="submit"

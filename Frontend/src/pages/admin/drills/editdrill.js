@@ -3,6 +3,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { DrillsURL, GetDrillsURL } from "../../../config/url-constant";
 
 const validate = Yup.object().shape({
   drillName: Yup.string()
@@ -18,8 +19,8 @@ function EditDrill() {
   const history = useHistory();
   useEffect(() => {
     const fetchdrill = async () => {
-      const response = await fetch(
-        `http://localhost:8080/drill/${params.drillId}`
+      const response = await fetch(DrillsURL+`/${params.drillId}`
+       
       );
       const responseData = await response.json();
       console.log(responseData);
@@ -32,7 +33,8 @@ function EditDrill() {
     console.log(values);
     console.log(params.drillId);
 
-    let res = await fetch(`http://localhost:8080/drill/${params.drillId}`, {
+    
+      let res = await fetch(DrillsURL+`/${params.drillId}`, {
       method: "put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),

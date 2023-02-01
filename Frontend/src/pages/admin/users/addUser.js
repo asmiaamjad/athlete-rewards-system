@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../main.css";
+import {UsersURL} from "../../../config/url-constant";
 const SUPPORTED_FORMATS = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
 // Creating schema
 const validate = Yup.object().shape({
@@ -56,8 +57,7 @@ function Login() {
     data.append("password", values.password);
     data.append("confirmPassword", values.confirmPassword);
     data.append("photo", file);
-    let res = await fetch("http://localhost:8080/users", {
-    // let res = await fetch("http://localhost:8080/auth/signup", {
+    let res = await fetch(UsersURL, {
       method: "post",
       body: data,
     })
@@ -213,9 +213,9 @@ function Login() {
                   {errors.password && touched.password && (<div class ="error">{errors.password}</div>)}
                   <div className="input-group mb-3">
                     <input
-                      class="form-control"
-                      className={'form-control' + (errors.password && touched.password ? ' is-invalid' : '')}
+                      className={'form-control' + (errors.confirmPassword && touched.confirmPassword ? ' is-invalid' : '')}
                       name="confirmPassword"
+                      type="password"
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.confirmPassword}

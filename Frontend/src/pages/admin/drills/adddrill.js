@@ -4,7 +4,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import {DrillsURL} from "../../../config/url-constant";
 // Creating schema
 const validate = Yup.object().shape({
   drillName: Yup.string()
@@ -20,7 +20,8 @@ function AddDrill() {
   const onSubmit = async (values, actions) => {
     console.log(values);
 
-    let res = await fetch("http://localhost:8080/drill", {
+   
+      let res = await fetch(DrillsURL, {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),

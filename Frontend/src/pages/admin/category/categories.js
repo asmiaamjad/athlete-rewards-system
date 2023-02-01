@@ -2,21 +2,21 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import { CategoriesURL,PhotoURL } from "../../../config/url-constant";
 const Categories = () => {
   const [categories, setCategories] = useState([]);
   useEffect(() => {
     fetchcategories();
   }, []);
   const fetchcategories = async () => {
-    const response = await fetch("http://localhost:8080/category");
+    const response = await fetch(CategoriesURL);
     const responseData = await response.json();
     console.log(responseData);
     setCategories(responseData);
   };
 
   const deletecategory = async (id) => {
-    const response = await fetch(`http://localhost:8080/category/${id}`, {
+    const response = await fetch(CategoriesURL + `/${id}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -81,7 +81,7 @@ const Categories = () => {
                                 <img
                                   class="image"
                                   src={
-                                    "http://localhost:8080/images/photos/" +
+                                    PhotoURL +
                                     category.photo
                                   }
                                   alt="User Image"

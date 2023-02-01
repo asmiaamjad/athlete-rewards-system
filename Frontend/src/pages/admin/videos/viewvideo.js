@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from "react";
 import {useParams} from 'react-router-dom'
+import { VideosURL } from '../../../config/url-constant';
 const ViewVideo = () => {
     const params = useParams();
     const [Videos, setVideos] = useState([]);
@@ -9,7 +10,7 @@ const ViewVideo = () => {
       const fetchvideos = async () => {
         console.log(params.videoId);
         const id= params.videoId
-        const response = await fetch("http://localhost:8080/videos/"+ id);
+        const response = await fetch(VideosURL+ `/${id}`);
         const responseData = await response.json();
         console.log(responseData.videoUrl);
         
@@ -49,7 +50,7 @@ const ViewVideo = () => {
                 {
                   Videos.length!==0 &&  <video style={{ width: "90%" }} controls>
                   <source
-                    src={"http://localhost:8080/videos/" + Videos.videoUrl}
+                    src={VideosURL + Videos.videoUrl}
                     alt="videos"
                   />
                 </video>

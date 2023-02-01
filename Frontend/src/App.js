@@ -46,9 +46,9 @@ function App() {
             <Route path="/resetpassword/:token">
               <ResetPassword />
             </Route>
-            <Route path="*">
+            {/* <Route path="*">
               <Redirect to="/login" />
-            </Route>
+            </Route> */}
           </div>
         ) : (
           <div>

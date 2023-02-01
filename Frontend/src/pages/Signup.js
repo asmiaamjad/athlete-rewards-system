@@ -4,8 +4,9 @@ import * as Yup from "yup";
 import { Link, useHistory } from "react-router-dom";
 import ForgetPassword from "./forgetPassword.js";
 import AuthContext from "../store/auth-context";
-import Signup from "./Signup";
+// import Signup from "./Signup";
 import { toast } from "react-toastify";
+import {SignupURL} from "../config/url-constant";
 const SUPPORTED_FORMATS = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
 // Creating schema
 const validate = Yup.object().shape({
@@ -58,7 +59,7 @@ function Login() {
     data.append("password", values.password);
     data.append("confirmPassword", values.confirmPassword);
     data.append("photo", file);
-    let res = await fetch("http://localhost:8080/auth/signup", {
+    let res = await fetch(SignupURL, {
       method: "post",
       body: data,
     })

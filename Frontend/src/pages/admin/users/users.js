@@ -2,13 +2,15 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { UsersURL, PhotoURL } from "../../../config/url-constant";
 const Users = () => {
   const [users, setUsers] = useState([]);
   useEffect(() => {
     fetchusers();
   }, []);
   const fetchusers = async () => {
-    const response = await fetch("http://localhost:8080/users");
+    const response = await fetch(UsersURL);
+
     const responseData = await response.json();
     console.log(responseData);
     setUsers(responseData);
@@ -16,7 +18,8 @@ const Users = () => {
 
   const deleteUser = async (id) => {
     console.log(id);
-    const response = await fetch(`http://localhost:8080/users/${id}`, {
+
+    const response = await fetch(UsersURL + `/${id}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -33,8 +36,6 @@ const Users = () => {
         toast.error(`Something went wrong`);
         console.error(error);
       });
-
-   
   };
 
   return (
@@ -71,9 +72,11 @@ const Users = () => {
                         <tr style={{ padding: "15px" }}>
                           <th>Profile</th>
                           <th>User Name</th>
-                          <th style={{paddingLeft:"50px"}}>Email</th>
+                          <th style={{ paddingLeft: "50px" }}>Email</th>
                           <th>Points</th>
-                          <th style={{ width: "40px", paddingLeft:"50px"}}>Actions</th>
+                          <th style={{ width: "40px", paddingLeft: "50px" }}>
+                            Actions
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -81,35 +84,34 @@ const Users = () => {
                           <>
                             <tr key={user._id}>
                               <td>
-                                <img class="image"
-                                  
+                                <img
+                                  class="image"
                                   src={
-                                    "http://localhost:8080/images/photos/" +
+                                    PhotoURL +
                                     user.photo
                                   }
                                   alt="User Image"
                                 />
                               </td>
-                              <td style={{padding:"25px"}}>{user.username}</td>
-                              <td style={{padding:"25px"}}>{user.email}</td>
-                              <td style={{padding:"25px"}}>{user.total_points? user.total_points: "0"}</td>
-                              <td style={{padding:"25px"}}>
-                                <Link
-                                  to={`/users/${user._id}`}
-                                 
-                                >
+                              <td style={{ padding: "25px" }}>
+                                {user.username}
+                              </td>
+                              <td style={{ padding: "25px" }}>{user.email}</td>
+                              <td style={{ padding: "25px" }}>
+                                {user.total_points ? user.total_points : "0"}
+                              </td>
+                              <td style={{ padding: "25px" }}>
+                                <Link to={`/users/${user._id}`}>
                                   <span>
                                     <i class="fas fa-edit"></i>
                                   </span>
                                 </Link>
                               </td>
-                              <td style={{padding:"25px"}}>
-                              
+                              <td style={{ padding: "25px" }}>
                                 <i
                                   class="fas fa-trash deleteicon"
                                   onClick={() => deleteUser(user._id)}
                                 ></i>
-                                
                               </td>
                             </tr>
                           </>

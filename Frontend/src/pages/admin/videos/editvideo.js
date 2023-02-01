@@ -4,8 +4,7 @@ import moment from "moment";
 import * as Yup from "yup";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-
-// const SUPPORTED_FORMATS = ["video/mp4", "video/MPEG", "video/MKV"];
+import { DrillsURL, VideosURL } from "../../../config/url-constant";
 
 const validate = Yup.object().shape({
   title: Yup.string()
@@ -18,7 +17,7 @@ const validate = Yup.object().shape({
 });
 
 function EditAthlete() {
-//   const [file, setFile] = useState("");
+
   const [video, setVideo] = useState("");
   const [drills, setDrills] = useState("");
   const params = useParams();
@@ -27,13 +26,13 @@ function EditAthlete() {
   useEffect(() => {
     const fetchvideo = async () => {
       const response = await fetch(
-        `http://localhost:8080/videos/${params.videoId}`
+        VideosURL+`/${params.videoId}`
       );
       const responseData = await response.json();
       setVideo(responseData);
     };
     const getdrill = async () => {
-      let res = await fetch("http://localhost:8080/drill");
+      let res = await fetch(DrillsURL);
       let responseJson = await res.json();
       setDrills(responseJson);
     };
@@ -43,7 +42,7 @@ function EditAthlete() {
 
   const onSubmit = async (values, actions) => {
     console.log(params.videoId);
-    let res = await fetch(`http://localhost:8080/videos/${params.videoId}`, {
+    let res = await fetch(VideosURL+`/${params.videoId}`, {
       method: "put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),

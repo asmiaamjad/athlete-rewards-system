@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // const token = localStorage.getItem("token");
 import {toast} from 'react-toastify';
+import { VideosURL } from "../../../config/url-constant";
 const Videos = () => {
   const [videos, setVideos] = useState([]);
   useEffect(() => {
     fetchvideos();
   }, []);
   const fetchvideos = async () => {
-    const response = await fetch("http://localhost:8080/videos");
+    const response = await fetch(VideosURL);
     const responseData = await response.json();
     console.log(responseData);
     // console.log(responseData.categoryName);
@@ -18,7 +19,7 @@ const Videos = () => {
 
   const deletevideo = async (id) => {
     // console.log(id);
-    const response = await fetch(`http://localhost:8080/videos/${id}`, {
+    const response = await fetch(VideosURL+`/${id}`, {
       method: "DELETE",
     })
     .then((response) => {
@@ -85,7 +86,7 @@ const Videos = () => {
                                 
                                   <source
                                     src={
-                                      "http://localhost:8080/videos/" +
+                                      VideosURL +
                                       video.videoUrl
                                     }
                                     alt="videos"

@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { DrillsURL } from "../../../config/url-constant";
 import "../main.css"
 const Users = () => {
   const [drills, setDrills] = useState([]);
@@ -9,7 +10,7 @@ const Users = () => {
     fetchdrills();
   }, []);
   const fetchdrills = async () => {
-    const response = await fetch("http://localhost:8080/drill");
+    const response = await fetch(DrillsURL);
     const responseData = await response.json();
     console.log(responseData);
     setDrills(responseData);
@@ -17,7 +18,8 @@ const Users = () => {
 
   const deleteDrill = async (id) => {
     console.log(id);
-    const response = await fetch(`http://localhost:8080/drill/${id}`, {
+    
+      const response = await fetch(DrillsURL+`/${id}`, {
       method: "DELETE",
     })
     .then((response) => {
@@ -25,7 +27,6 @@ const Users = () => {
       if (response.ok) {
         toast.success("Drill and all videos in this drill deleted successfully");
         fetchdrills();
-        // history.push("/drills");
       } else {
         toast.error(`Drill doesn't delete `);
       }
